@@ -22,6 +22,11 @@ export class AppComponent implements OnInit {
             this.products = products.Allproducts;
         });
     }
-    
+    //delete products
+    deleteProduct(id) {
+    	this.http.delete('http://penciltask.wedev/api/v1/products/'+id).subscribe(res => {
+    		this.getProducts();
+    	});
+    }
     
 }
