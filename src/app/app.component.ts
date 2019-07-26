@@ -1,10 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormGroup, FormControl, FormArray, NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'PencilTaskFrontend';
+
+@Injectable()
+export class AppComponent implements OnInit {
+    title = 'Pencil Task FE';
+    products: any;
+
+    constructor(private http: HttpClient) {
+        this.getProducts();
+    }
+    //get all products
+    getProducts() {
+        return this.http.get('http://penciltask.wedev/api/v1/products').subscribe(products => {
+            this.products = products.Allproducts;
+        });
+    }
+    
+    
 }
