@@ -24,9 +24,12 @@ export class AppComponent implements OnInit {
     }
     //delete products
     deleteProduct(id) {
-    	this.http.delete('http://penciltask.wedev/api/v1/products/'+id).subscribe(res => {
-    		this.getProducts();
-    	});
+    	if(confirm("Are you sure to delete this product")) {
+    		this.http.delete('http://penciltask.wedev/api/v1/products/'+id).subscribe(res => {
+    			this.getProducts();
+    		});
+  		}
+    	
     }
     
 }
