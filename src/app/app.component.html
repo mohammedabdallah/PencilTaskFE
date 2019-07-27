@@ -36,7 +36,7 @@
             <hr />
             <!-- Form to add data -->
             <form [formGroup]="productForm" (ngSubmit)="storeProduct(productForm)">
-                
+
                 <div class="form-group">
                     <label for="name">Product Name</label>
                     <input type="text" class="form-control" name="name" formControlName="name">
@@ -53,17 +53,41 @@
                 <div class="form-group">
                     <label for="description">description</label>
                     <textarea name="description" class="form-control" formControlName="description">
-                        
+
                     </textarea>
                 </div>
+
                 <div class="form-control">
-                    <input type="file"  (change)="onImagePicked($event)"  />
+                    <input type="file"  (change)="onImagePicked($event)"  /> 
                 </div>
 
-                <button type="submit" class="btn btn-primary">Add</button>
-                <button type="button" (click)="updateProduct(product.id)" class="btn btn-primary">Update</button>
+                <div formArrayName="customfields">
+                    <h3>Custom Fields</h3>
+                     <button (click)="addCustomField()" type="button" class="btn btn-primary m-1">Add Custom field</button>
+                    <div class="row">
+                    <div class="col-xs-6" *ngFor="let customfield of productForm.get('customfields').controls; let i=index">
+                        <div class="form-control row" [formGroupName]="i">
+                            <div class="form-group col-xs-6">
+                                <label>
+                                  Value:
+                              </label>
+                              <input type="text" class="form-control" formControlName="cvalue">
+                          </div>
+                          <div class="form-group col-xs-6">
+                            <label>
+                              Description:
+                          </label>
+                          <textarea class="form-control" formControlName="cdescription">
+                          </textarea>
+                        </div>
+                  </div>
+              </div>
+          </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" (click)="updateProduct(product.id)" class="btn btn-primary">Update</button>
 
-            </form>
-        </div>    
-    </div>
+      </form>
+  </div>    
+</div>
 </div>
