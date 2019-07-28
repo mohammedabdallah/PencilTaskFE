@@ -30,17 +30,15 @@ export class AppComponent implements OnInit {
     }
     ngOnInit() {
         this.productForm = new FormGroup({
-            'name': new FormControl(null,Validators.required),
-            'code': new FormControl(null,{ validators: [Validators.required] }),
-            'price': new FormControl(null,{ validators: [Validators.required] }),
-            'description': new FormControl(null,{ validators: [Validators.required] }),
-            'product_image': new FormControl(null,{ validators: [Validators.required] }),
-            'customfields': this.fb.array([
-    			this.fb.control([this.createCustomField()])
-  			])
+            'name': new FormControl('Abd-Allah',Validators.required),
+            'code': new FormControl(123,{ validators: [Validators.required] }),
+            'price': new FormControl(1000,{ validators: [Validators.required] }),
+            'description': new FormControl('Hi Abd-Allah',{ validators: [Validators.required] }),
+            'product_image': new FormControl({},{ validators: [Validators.required] }),
+            'customfields': this.fb.array([])
         });
         this.customfields = this.productForm.get('customfields') as FormArray;
-       
+       this.addCustomField();
     }
     // contact formgroup
   createCustomField(): FormGroup {
@@ -67,7 +65,12 @@ export class AppComponent implements OnInit {
     	postData.append('price',this.productForm.value.price);
     	postData.append('description',this.productForm.value.description);
     	postData.append("product_image", this.productImage);
-    	postData.append("customfields",this.customfields.value);
+    	postData.append("customfields",JSON.stringify(this.customfields.value));
+        // for(let index in this.customfields.value){
+        //     const current = this.customfields.value[index];
+        //     postData.append(`customfields-${index}-cvalue`, current.cvalue);
+        //     postData.append(`customfields-${index}-cdescription`, current.cdescription)
+        // }
     	this.http.post('http://penciltask.wedev/api/v1/products',postData).subscribe(res => {
     		 //call get products to update table
              this.getProducts();

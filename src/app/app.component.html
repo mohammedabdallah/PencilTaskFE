@@ -39,19 +39,19 @@
 
                 <div class="form-group">
                     <label for="name">Product Name</label>
-                    <input type="text" class="form-control" name="name" formControlName="name">
-                    <span class="text-danger" *ngIf="submitted && f.name.errors.required">Name required</span>
+                    <input type="text" required class="form-control" name="name" formControlName="name">
+                    <span class="text-danger" *ngIf="submitted && (f.name.errors?f.name.errors.required:false)">Name required</span>
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
-                    <input type="number" class="form-control" name="price" min="0" max="99999" step=".01" formControlName="price">
-                    <span class="text-danger" *ngIf="submitted && f.price.errors.required">Price required</span>
+                    <input type="number" required class="form-control" name="price" min="0" max="99999" step=".01" formControlName="price">
+                    <span class="text-danger" *ngIf="submitted && (f.price.errors?f.price.errors.required:false)">Price required</span>
 
                 </div>
                 <div class="form-group">
                     <label for="code">code</label>
-                    <input type="number" class="form-control" name="code" min="1" max="10" formControlName="code">
-                    <span class="text-danger" *ngIf="submitted && f.code.errors.required">Code required</span>
+                    <input type="number" required class="form-control" name="code" min="1" max="10" formControlName="code">
+                    <span class="text-danger" *ngIf="submitted && (f.code.errors? f.code.errors.required:false)">Code required</span>
 
                 </div>
                 <div class="form-group">
