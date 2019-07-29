@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
             'code': new FormControl(123,{ validators: [Validators.required] }),
             'price': new FormControl(1000,{ validators: [Validators.required] }),
             'description': new FormControl('Hi Abd-Allah',{ validators: [Validators.required] }),
-            'product_image': new FormControl({},{ validators: [Validators.required] }),
+            'product_image': new FormControl(null,{ validators: [Validators.required] }),
             'customfields': this.fb.array([])
         });
         this.customfields = this.productForm.get('customfields') as FormArray;
@@ -43,8 +43,8 @@ export class AppComponent implements OnInit {
     // contact formgroup
   createCustomField(): FormGroup {
     return this.fb.group({
-      cvalue: new FormControl(null,{ validators: [Validators.required] }),
-      cdescription: new FormControl(null,{ validators: [Validators.required] })
+      cvalue: new FormControl(null),
+      cdescription: new FormControl(null)
     });
   }
   
@@ -66,11 +66,6 @@ export class AppComponent implements OnInit {
     	postData.append('description',this.productForm.value.description);
     	postData.append("product_image", this.productImage);
     	postData.append("customfields",JSON.stringify(this.customfields.value));
-        // for(let index in this.customfields.value){
-        //     const current = this.customfields.value[index];
-        //     postData.append(`customfields-${index}-cvalue`, current.cvalue);
-        //     postData.append(`customfields-${index}-cdescription`, current.cdescription)
-        // }
     	this.http.post('http://penciltask.wedev/api/v1/products',postData).subscribe(res => {
     		 //call get products to update table
              this.getProducts();
@@ -82,18 +77,23 @@ export class AppComponent implements OnInit {
     }
     //update product
     updateProduct(id,productForm: NgForm) {
-    	const postData = new FormData();
-    	postData.append('name',this.productForm.value.name);
-    	postData.append('code',this.productForm.value.code);
-    	postData.append('price',this.productForm.value.price);
-    	postData.append('description',this.productForm.value.description);
-    	postData.append("product_image", this.productImage);
+        this.submitted = true;
+        if(this.productForm.invalid)
+            return;
+    	const updateData = new FormData();
+    	updateData.append('name',this.productForm.value.name);
+    	updateData.append('code',this.productForm.value.code);
+    	updateData.append('price',this.productForm.value.price);
+    	updateData.append('description',this.productForm.value.description);
+    	updateData.append("product_image", this.productImage);
+        updateData.append("customfields",JSON.stringify(this.customfields.value));
+        console.log(updateData);
     	this.http.put('http://penciltask.wedev/api/v1/products/' + id, this.productForm.value).subscribe(res => {
             this.getProducts();
+            this.productForm.reset();
         }, err => {
             console.log('Error occured');
         });
-        this.productForm.reset();
     }
     showProduct(id) {
     	return this.http.get('http://penciltask.wedev/api/v1/products/' + id).subscribe(product => {
@@ -133,4 +133,7 @@ export class AppComponent implements OnInit {
     	this.customfields.push(this.createCustomField());
     }
     get f() { return this.productForm.controls; }
+    DeleteCustomField(index) {
+    this.customfields.removeAt(index);
+  }
 }
